@@ -1,0 +1,81 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- uv ---
+.venv/
+uv.lock.bak
+
+# --- Environment / secrets ---
+.env
+.env.*.local
+!.env.example
+
+# --- Testing / coverage ---
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+.hypothesis/
+
+# --- Type checkers / linters ---
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# --- Locust ---
+tests/load/results/
+*.csv
+!artifacts/*.csv
+
+# --- Docker ---
+*.pid
+
+# --- Alembic (mantener versions/, ignorar solo temporales) ---
+alembic/*.sqlite3
+
+# --- Logs ---
+*.log
+logs/
+
+# --- VS Code ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# --- PyCharm / JetBrains ---
+.idea/
+
+# --- OS ---
+.DS_Store
+Thumbs.db
+
+# --- Editores ---
+*.swp
+*.swo
+*~
+
+# --- Modelos pesados de ML (ignorar excepto base v001) ---
+artifacts/models/v[0-9]*
+!artifacts/models/v001__20260713T123417/

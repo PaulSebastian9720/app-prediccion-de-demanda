@@ -1,0 +1,4 @@
+# Los scripts de shell DEBEN usar finales de linea LF, si no el contenedor
+# Linux no puede ejecutar el shebang (`exec ./entrypoint.sh: no such file or directory`).
+*.sh text eol=lf
+entrypoint.sh text eol=lf
