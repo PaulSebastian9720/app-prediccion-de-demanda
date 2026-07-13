@@ -1,0 +1,103 @@
+{
+  "fecha_entrenamiento": "2026-07-13T12:34:17",
+  "n_features": 38,
+  "feature_cols": [
+    "precio_medio",
+    "dow",
+    "mes",
+    "semana",
+    "dow_sin",
+    "dow_cos",
+    "mes_sin",
+    "mes_cos",
+    "es_fin_de_semana",
+    "es_lunes",
+    "es_viernes",
+    "lag_1",
+    "lag_2",
+    "lag_3",
+    "lag_4",
+    "lag_5",
+    "lag_6",
+    "lag_7",
+    "lag_14",
+    "lag_21",
+    "roll_mean_7",
+    "roll_mean_14",
+    "roll_std_7",
+    "roll_max_7",
+    "roll_min_7",
+    "expand_mean_clasificador",
+    "diff_semana",
+    "ratio_vs_media",
+    "acum_semana",
+    "clasificador_ALIMENTACION_HIDRATACION",
+    "clasificador_DESCANSO",
+    "clasificador_HIGIENE_ASEO",
+    "clasificador_IDENTIFICACION_LOCALIZACION",
+    "clasificador_JUGUETES",
+    "clasificador_OTROS_ACCESORIOS",
+    "clasificador_PASEO_SUJECION",
+    "clasificador_TRANSPORTE_VIAJE",
+    "clasificador_VESTIMENTA"
+  ],
+  "clasificadores": [
+    "ALIMENTACION_HIDRATACION",
+    "DESCANSO",
+    "HIGIENE_ASEO",
+    "IDENTIFICACION_LOCALIZACION",
+    "JUGUETES",
+    "OTROS_ACCESORIOS",
+    "PASEO_SUJECION",
+    "TRANSPORTE_VIAJE",
+    "VESTIMENTA"
+  ],
+  "lags_usados": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    14,
+    21
+  ],
+  "hiperparametros": {
+    "subsample": 0.9,
+    "reg_lambda": 1.0,
+    "min_child_weight": 5,
+    "max_depth": 4,
+    "learning_rate": 0.05,
+    "colsample_bytree": 0.7
+  },
+  "metricas": {
+    "validacion": {
+      "MAE": 5.234118828248671,
+      "RMSE": 13.57960185751571,
+      "R2": 0.5123259345851119
+    },
+    "prueba": {
+      "MAE": 7.435102524184105,
+      "RMSE": 17.179984526657762,
+      "R2": 0.3036106637881191
+    }
+  },
+  "feature_importance_top15": {
+    "roll_mean_14": 33.34,
+    "lag_14": 28.36,
+    "lag_21": 16.34,
+    "expand_mean_clasificador": 16.24,
+    "roll_min_7": 15.82,
+    "roll_mean_7": 15.37,
+    "clasificador_OTROS_ACCESORIOS": 9.77,
+    "roll_max_7": 9.53,
+    "lag_4": 9.0,
+    "es_fin_de_semana": 7.49,
+    "clasificador_JUGUETES": 7.42,
+    "roll_std_7": 7.3,
+    "clasificador_IDENTIFICACION_LOCALIZACION": 6.4,
+    "es_viernes": 6.39,
+    "clasificador_DESCANSO": 6.33
+  }
+}
