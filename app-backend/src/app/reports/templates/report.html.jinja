@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reporte de reabastecimiento</title>
+<style>
+    /*
+      Paleta acotada a 4 colores estructurales + 3 semanticos:
+        --ink      texto principal
+        --accent   marca / acentos estructurales (unico color "vivo" fuera de prioridad)
+        --line     bordes y fondos neutros
+        --paper    blanco
+        --alta/--media/--baja: solo para prioridad (badges y barras coloreadas por prioridad)
+    */
+    @page {
+        size: A4;
+        margin: 2cm 1.6cm;
+        @bottom-center {
+            content: "Pagina " counter(page) " de " counter(pages);
+            font-size: 8pt;
+            color: #94a3b8;
+        }
+    }
+
+    * { box-sizing: border-box; }
+
+    :root {
+        --ink: #1e293b;
+        --ink-soft: #64748b;
+        --accent: #4338ca;
+        --line: #e2e8f0;
+        --paper: #ffffff;
+        --surface: #f8fafc;
+        --alta: #dc2626;
+        --media: #d97706;
+        --baja: #16a34a;
+    }
+
+    body {
+        font-family: "DejaVu Sans", "Helvetica Neue", Arial, sans-serif;
+        color: var(--ink);
+        font-size: 10pt;
+        line-height: 1.5;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2.5px solid var(--accent);
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+    .header .brand { display: flex; align-items: center; gap: 12px; }
+    .header img.logo { max-height: 42px; max-width: 150px; }
+    .header .brand-name { font-size: 12pt; font-weight: 700; color: var(--accent); }
+    .header .meta { text-align: right; font-size: 8.5pt; color: var(--ink-soft); }
+    .header .meta .title { font-size: 11pt; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+
+    h2.section-title {
+        font-size: 10pt;
+        color: var(--ink);
+        border-left: 4px solid var(--accent);
+        padding-left: 8px;
+        margin: 22px 0 9px 0;
+    }
+    h3.chart-title {
+        font-size: 8.5pt;
+        font-weight: 700;
+        color: var(--ink-soft);
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        margin: 4px 0 2px 0;
+    }
+
+    .card {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+    }
+
+    .summary-box {
+        white-space: pre-line;
+        font-size: 9.5pt;
+        color: #334155;
+    }
+
+    .kpi-row { display: flex; gap: 12px; margin-top: 14px; }
+    .kpi-card {
+        flex: 1;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-top: 3px solid var(--accent);
+        border-radius: 8px;
+        padding: 10px 12px;
+    }
+    .kpi-card .kpi-label { font-size: 8pt; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
+    .kpi-card .kpi-value { font-size: 15pt; font-weight: 700; color: var(--ink); margin-top: 2px; }
+    .kpi-card.alerta { border-top-color: var(--alta); }
+    .kpi-card.alerta .kpi-value { color: var(--alta); }
+
+    table.priority-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8.5pt;
+        margin-top: 4px;
+    }
+    table.priority-table th {
+        background: var(--ink);
+        color: var(--paper);
+        text-align: left;
+        padding: 6px 8px;
+        font-weight: 600;
+    }
+    table.priority-table td {
+        padding: 6px 8px;
+        border-bottom: 1px solid var(--line);
+    }
+    table.priority-table tr:nth-child(even) td { background: var(--surface); }
+    table.priority-table tr { break-inside: avoid; }
+    table.priority-table thead { display: table-header-group; }
+
+    .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 7.5pt;
+        font-weight: 700;
+        color: var(--paper);
+    }
+    .badge.alta { background: var(--alta); }
+    .badge.media { background: var(--media); }
+    .badge.baja { background: var(--baja); }
+
+    .chart-block { margin-top: 4px; text-align: center; }
+    .chart-block img { max-width: 100%; }
+
+    /* Detalle por categoria: seccion secuencial (titulo + texto + grafica),
+       sin tarjetas ni grillas — cada categoria separada por una linea fina. */
+    .category-block {
+        break-inside: avoid;
+        padding: 12px 0;
+    }
+    .category-block-head {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 4px;
+    }
+    .category-block-head h3 {
+        font-size: 10.5pt;
+        font-weight: 700;
+        color: var(--ink);
+        margin: 0;
+    }
+    .category-narrative {
+        font-size: 8.8pt;
+        color: #334155;
+        line-height: 1.55;
+        margin: 4px 0 10px 0;
+        max-width: 15.5cm;
+    }
+    .category-stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px 20px;
+        font-size: 8pt;
+        color: var(--ink-soft);
+        margin-bottom: 10px;
+    }
+    .category-stats strong { color: var(--ink); }
+    .category-chart-img { width: 68%; display: block; }
+    .category-divider { border: none; border-top: 1px solid var(--line); margin: 2px 0; }
+
+    .footer-note {
+        margin-top: 24px;
+        font-size: 7.5pt;
+        color: #94a3b8;
+        border-top: 1px solid var(--line);
+        padding-top: 8px;
+    }
+
+    .text-right { text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="header">
+    <div class="brand">
+        {% if logo_data_uri %}
+        <img class="logo" src="{{ logo_data_uri }}" alt="Logo">
+        {% endif %}
+        <div class="brand-name">{{ app_name }}</div>
+    </div>
+    <div class="meta">
+        <div class="title">Reporte de Reabastecimiento</div>
+        <div>Periodo: {{ horizonte_label }}</div>
+        <div>Generado el {{ fecha_generacion.strftime("%d/%m/%Y") }}</div>
+    </div>
+</div>
+
+<div class="card summary-box">{{ resumen }}</div>
+
+<div class="kpi-row">
+    <div class="kpi-card alerta">
+        <div class="kpi-label">Categorias en prioridad alta</div>
+        <div class="kpi-value">{{ total_alertas }}</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Costo de oportunidad total</div>
+        <div class="kpi-value">{{ currency }}{{ "{:,.2f}".format(total_costo_oportunidad) }}</div>
+    </div>
+    <div class="kpi-card">
+        <div class="kpi-label">Costo aproximado de reposicion</div>
+        <div class="kpi-value">{{ currency }}{{ "{:,.2f}".format(total_costo_reposicion) }}</div>
+    </div>
+</div>
+
+<h2 class="section-title">Demanda proyectada por categoria</h2>
+<h3 class="chart-title">Unidades totales del periodo, coloreadas por prioridad de reabastecimiento</h3>
+<div class="chart-block"><img src="{{ demand_chart }}" alt="Demanda proyectada por categoria"></div>
+
+<h2 class="section-title">Stock actual vs. demanda proyectada</h2>
+<h3 class="chart-title">Comparacion directa para detectar categorias en riesgo de quiebre</h3>
+<div class="chart-block"><img src="{{ stock_chart }}" alt="Stock actual vs demanda proyectada"></div>
+
+<h2 class="section-title">Tabla de prioridades de reabastecimiento</h2>
+<table class="priority-table">
+    <thead>
+        <tr>
+            <th>Categoria</th>
+            <th class="text-right">Stock actual</th>
+            <th class="text-right">Demanda proy.</th>
+            <th class="text-right">Dias restantes</th>
+            <th>Prioridad</th>
+            <th class="text-right">Costo oportunidad</th>
+            <th class="text-right">Unid. a reponer</th>
+            <th class="text-right">Costo reposicion</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.nombre_display }}</td>
+            <td class="text-right">{{ "%.0f"|format(row.stock_actual) }}</td>
+            <td class="text-right">{{ row.demanda_proyectada }}</td>
+            <td class="text-right">
+                {% if row.dias_inventario_restante is not none %}
+                    {{ "%.1f"|format(row.dias_inventario_restante) }}
+                {% else %}
+                    &mdash;
+                {% endif %}
+            </td>
+            <td><span class="badge {{ row.prioridad|lower }}">{{ row.prioridad }}</span></td>
+            <td class="text-right">{{ currency }}{{ "{:,.2f}".format(row.costo_oportunidad_quiebre) }}</td>
+            <td class="text-right">{{ "%.0f"|format(row.unidades_a_reponer) }}</td>
+            <td class="text-right">{{ currency }}{{ "{:,.2f}".format(row.costo_reposicion_total) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h2 class="section-title">Detalle por categoria</h2>
+<h3 class="chart-title">Analisis y tendencia individual, categoria por categoria</h3>
+{% for row, narrativa, chart in category_sections %}
+<div class="category-block">
+    <div class="category-block-head">
+        <h3>{{ row.nombre_display }}</h3>
+        <span class="badge {{ row.prioridad|lower }}">{{ row.prioridad }}</span>
+    </div>
+    <p class="category-narrative">{{ narrativa }}</p>
+    <div class="category-stats">
+        <span><strong>{{ "%.0f"|format(row.stock_actual) }}</strong> u. en stock</span>
+        <span><strong>{{ row.demanda_proyectada }}</strong> u. proyectadas</span>
+        <span><strong>{{ currency }}{{ "%.2f"|format(row.precio_venta) }}</strong> precio de venta</span>
+        <span><strong>{{ currency }}{{ "{:,.2f}".format(row.costo_reposicion_total) }}</strong> inversion sugerida</span>
+    </div>
+    <img class="category-chart-img" src="{{ chart }}" alt="Tendencia de demanda diaria de {{ row.nombre_display }}">
+</div>
+{% if not loop.last %}<hr class="category-divider">{% endif %}
+{% endfor %}
+
+<div class="footer-note">
+    Reporte generado automaticamente por {{ app_name }} el {{ fecha_generacion.strftime("%d/%m/%Y") }}.
+    Precios y costos son valores de referencia del catalogo de productos.
+</div>
+
+</body>
+</html>
