@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+/* Paleta unica de la app: azul marino en tonos pastel (desaturado y suave).
+   Se define en :root y se mapea a utilidades via @theme inline, el patron
+   compatible con la configuracion de Tailwind v4 de este proyecto. */
+:root {
+  --paper: #f2f5f9;
+
+  --accent-50: #f4f7fb;
+  --accent-100: #e7edf5;
+  --accent-200: #d0dcea;
+  --accent-300: #aec3da;
+  --accent-400: #85a3c4;
+  --accent-500: #6488ad;
+  --accent-600: #4a6d94;
+  --accent-700: #3d5a7c;
+  --accent-800: #344b66;
+  --accent-900: #2d3f55;
+
+  /* Sombra tenida con tinta azul marino (nunca negro puro). */
+  --card-shadow: 0 1px 2px 0 rgb(45 63 85 / 0.05), 0 4px 16px -6px rgb(45 63 85 / 0.08);
+}
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-paper: var(--paper);
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
+
+  --shadow-card: var(--card-shadow);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--paper);
+  color: #0f172a;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background-color: var(--accent-100);
+  color: var(--accent-900);
+}

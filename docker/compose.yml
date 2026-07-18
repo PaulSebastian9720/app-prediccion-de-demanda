@@ -1,0 +1,27 @@
+# Compose liviano para levantar SOLO la base de datos (Postgres 17) del backend
+
+# Uso: docker compose -f docker/compose.yml up -d
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: ventas-forecast-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ventas_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ventas_password}
+      POSTGRES_DB: ${POSTGRES_DB:-ventas_forecast}
+    ports:
+      - "5434:5432"
+    volumes:
+      - ventas_forecast_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ventas_user} -d ${POSTGRES_DB:-ventas_forecast}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  ventas_forecast_pgdata:
+    external: true
+    name: app-backend_ventas_forecast_pgdata
